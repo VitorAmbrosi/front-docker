@@ -1,4 +1,15 @@
-export default function TaskItem({ task }) {
+import { startTransition, useOptimistic } from "react";
+
+export default function TaskItem({ task, onToggle }) {
+    const [concluida, setOptmisticConcluida] = useOptimistic(task.concluida);
+
+    const handleToggle = () => {
+        startTransition(async () => {
+            setOptmisticConcluida(!task.concluida);
+            await onToggle({ task });
+        });
+    };
+
     let className = "task";
     if (task.concluida) {
         className += " task--done";
@@ -9,8 +20,8 @@ export default function TaskItem({ task }) {
                 <input 
                     type="checkbox"
                     className="checkbox"
-                    checked={task.concluida}
-                    readOnly
+                    checked={concluida}
+                    onChange={handleToggle}
                     aria-label={`Concluir: ${task.titulo}`}
                 />
             </div>

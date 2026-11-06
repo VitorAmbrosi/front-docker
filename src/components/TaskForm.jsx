@@ -1,3 +1,4 @@
+import { useActionState } from "react";
 const empty = { titulo: "" , descricao: "" };
 
 export default function TaskForm({ onAdd }) { 
@@ -11,4 +12,43 @@ export default function TaskForm({ onAdd }) {
 
         return ok ? empty : _previousState;
     }, empty)
+
+    return (
+        <form className="task-form" action={formAction}>
+            <span className="task-form__mark" aria-hidden="true">+</span>
+
+            <label className="visually-hidden" htmlFor="nova-titulo">Título</label>
+            <input
+                type="text"
+                id="nova-titulo"
+                name="titulo"
+                className="task-form__input"
+                placeholder="O que precisa ser feito?"
+                autoComplete="off"
+                maxLength={255}
+                required
+                defaultValue={state.titulo}
+                disabled={isPending}
+            />
+
+            <label className="visually-hidden" htmlFor="nova-descricao">Descrição</label>
+            <textarea
+                id="nova-descricao"
+                name="descricao"
+                className="task-form__details"
+                placeholder="Detalhes sobre a tarefa..."
+                rows={1}
+                defaultValue={state.descricao}
+                disabled={isPending}
+            />
+
+            <button
+                type="submit" 
+                className="button button--primary"
+                disabled={isPending}
+            >
+                {isPending ? "Adicionando..." : "Adicionar"}
+            </button>
+        </form>
+    )
 }
